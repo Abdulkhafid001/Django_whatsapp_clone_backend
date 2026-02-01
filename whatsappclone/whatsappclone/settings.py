@@ -1,5 +1,8 @@
 from pathlib import Path
 
+from dotenv import dotenv_values
+
+config = dotenv_values('.env')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -8,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=7%9-%a0_7p$#1apv5sxwet*r1j-z02#@5@h%g(7@*$%u#rf41'
+SECRET_KEY = config["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -67,6 +70,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# POSTGRESQL config
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config["NAME"],
+#         'USER': config["USER"],
+#         'PASSWORD': config["PASSWORD"],
+#         'HOST': config["HOST"],
+#         'PORT': config["PORT"],
+#     }
+# }
 
 
 # Password validation
