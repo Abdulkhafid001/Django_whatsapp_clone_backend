@@ -104,7 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+# settings.py
+AUTH_USER_MODEL = 'customauth.WcUser'
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 

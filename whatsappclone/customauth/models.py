@@ -1,19 +1,40 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 
-# class WcUser(models.Model):
-#     username = models.TextField(unique=True, max_length=55)
-#     password = models.CharField(max_length=128)
+class WcUserManager(BaseUserManager):
+    def create_user(self, username, password=None):
+        if not username:
+            raise ValueError('Username is required')
+        user = self.model(username=username)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-#     def save(self, *args, **kwargs):
-#         # hash password before saving to DB
-#         if not self.password.startswith('pbkdf2_'):
-#             self.password = make_password(self.password)
-#         super().save(*args, **kwargs)
+    def create_superuser(self, username, password=None):
+        user = self.create_user(username, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
-#     def verify_password(self, raw_password):
-#         return check_password(raw_password, self.password)
 
-#     def __str__(self) -> str:
-#         return self.username
+class WcUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=100, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+
+    objects = WcUserManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.username
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        return self.is_superuser
