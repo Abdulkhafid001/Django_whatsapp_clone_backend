@@ -38,28 +38,29 @@ def create_user(request):
 
 @api_view(['GET'])
 def get_user_by_id(request, id):
-    wc_user = WcUser.objects.get(id=id)
-    if wc_user.__class__.objects.exists():
-        serializer = WcUserSerializer(wc_user)
-        return Response(serializer.data)
-    return Response('User with Id does not exist')
+    try:
+        wc_user = WcUser.objects.get(id=id)
+        if wc_user.__class__.objects.exists():
+            serializer = WcUserSerializer(wc_user)
+            return Response(serializer.data)
+    except WcUser.DoesNotExist:
+        return Response('User with Id does not exist')
 
 
 @api_view(['GET'])
 def delete_user(request, id):
-    user = WcUser.objects.get(id=id)
-    serializer = WcUserSerializer(user)
-    # print(serializer.data)
-    # if serializer.is_valid
-    # if request.user.is_authenticated():
-    #     if request.user.is_super_user():
-    #         if user.is_superuser:
-    #             if user.is_staff:
-    #                 return Response('Cannot delete a superuser')
-    #         else:
-    #             user.delete()
-    #             return Response('User with id f{pk} is deleted')
-    return Response(serializer.data)
+    try:
+        user = WcUser.objects.get(id=id)
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                # check if current logged in user
+                if user.username == request.user.username:
+                    return Response('cannot delete yourself 🤣🤣')
+                else:
+                    user.delete()
+                    return Response(f'{user.username} deleted', status=status.HTTP_204_NO_CONTENT)
+    except WcUser.DoesNotExist:
+        return Response(f'User with id {id} does not exist in system')
 
 
 def hello(request):
