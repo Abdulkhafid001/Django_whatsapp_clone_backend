@@ -15,4 +15,15 @@ class WcUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WcUser
-        fields = ('username', 'password', 'is_active', 'is_superuser', 'is_staff', 'token')
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
+
+  
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = WcUser.objects.create(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
+        return user
