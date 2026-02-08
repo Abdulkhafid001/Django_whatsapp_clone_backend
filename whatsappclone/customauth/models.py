@@ -38,3 +38,8 @@ class WcUser(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return self.is_superuser
+
+
+class AccessToken(models.Model):
+    user = models.ForeignKey("WcUser", on_delete=models.CASCADE)
+    token = models.CharField(unique=True)
