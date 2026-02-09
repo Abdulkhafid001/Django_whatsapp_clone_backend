@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'chat',
     'customauth',
     'rest_framework',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -104,6 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000"
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -112,6 +117,9 @@ REST_FRAMEWORK = {
 }
 # settings.py
 AUTH_USER_MODEL = 'customauth.WcUser'
+
+
+DJANGO_RUNSERVER_HIDE_WARNING = "true"
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
