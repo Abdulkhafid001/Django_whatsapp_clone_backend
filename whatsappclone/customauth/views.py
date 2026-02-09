@@ -31,10 +31,10 @@ def get_all_users(request):
     return Response(serializer.data)
 
 
+
 @api_view(['POST'])
 def create_user(request):
     """ Creates a new user with username and password and associates user to an access token.  {"username": "", "password": ""} """
-    print(request.data['username'])
     serializer = WcUserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

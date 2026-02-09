@@ -177,7 +177,7 @@
             <p class="subtitle">Create your account to get started</p>
         </div>
 
-        <form id="form">
+        <form id="form" method="post">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username">
@@ -215,14 +215,23 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwNDAzMzU1LCJpYXQiOjE3NzA0MDMwNTUsImp0aSI6IjQzY2RiZmE0Y2EwMTRjODM4MDdmYzMwZDhlYjNlMjI1IiwidXNlcl9pZCI6IjcifQ.s2UTs-UahXoQrOnBQ5JB-t-JKv48ky34TW7FoRwbaH4',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwNjY5OTQwLCJpYXQiOjE3NzA2Njk2NDAsImp0aSI6IjA1NzM4MjZmY2JjZDRjZTQ4OWE1ODEzNTk2NGVjY2FjIiwidXNlcl9pZCI6IjcifQ.pLUojREjnMZU-q7qnzvytIRZsSUZVDVBfVFddBlh9t8',
                 },
                 body: JSON.stringify(data),
-            }).then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error))
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
-
     </script>
 </body>
 
