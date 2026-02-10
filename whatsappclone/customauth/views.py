@@ -24,14 +24,6 @@ def ApiOverview(request):
     return Response(api_urls)
 
 
-@api_view(['GET'])
-def get_all_users(request):
-    users = WcUser.objects.all()
-    serializer = WcUserSerializer(users, many=True)
-    return Response(serializer.data)
-
-
-
 @api_view(['POST'])
 def create_user(request):
     """ Creates a new user with username and password and associates user to an access token.  {"username": "", "password": ""} """
@@ -40,8 +32,8 @@ def create_user(request):
         serializer.save()
         # create access token for user
         create_user_access_token(request.data['username'])
-        return Response(serializer.data)
-    return Response(serializer.errors)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def create_user_access_token(username):
@@ -56,6 +48,18 @@ def create_user_access_token(username):
         WcAccessToken.objects.create(user=user, token=user_token)
     except WcUser.DoesNotExist:
         return 'cannot create user as user does not exist'
+
+
+@api_view(['POST'])
+def login(request):
+    pass
+
+
+@api_view(['GET'])
+def get_all_users(request):
+    users = WcUser.objects.all()
+    serializer = WcUserSerializer(users, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

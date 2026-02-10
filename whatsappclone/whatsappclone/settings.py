@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from datetime import timedelta
 from dotenv import dotenv_values
 
 config = dotenv_values('.env')
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'customauth',
     'rest_framework',
     'corsheaders',
+    'allauth',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,6 +142,17 @@ REST_FRAMEWORK = {
 }
 # settings.py
 AUTH_USER_MODEL = 'customauth.WcUser'
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440)
+}
 
 
 DJANGO_RUNSERVER_HIDE_WARNING = "true"
