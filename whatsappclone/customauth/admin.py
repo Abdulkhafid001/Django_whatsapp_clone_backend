@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import WcUser, AccessToken
+from .models import WcUser, RefreshToken
 
 
 class AccessTokenAdmin(admin.ModelAdmin):
@@ -7,4 +7,4 @@ class AccessTokenAdmin(admin.ModelAdmin):
 
 
 admin.site.register(WcUser)
-admin.site.register(AccessToken, AccessTokenAdmin)
+admin.site.register(RefreshToken, AccessTokenAdmin)

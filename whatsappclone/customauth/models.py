@@ -40,6 +40,6 @@ class WcUser(AbstractBaseUser, PermissionsMixin):
         return self.is_superuser
 
 
-class AccessToken(models.Model):
+class RefreshToken(models.Model):
     user = models.ForeignKey("WcUser", on_delete=models.CASCADE)
     token = models.CharField(unique=True)

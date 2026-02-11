@@ -151,7 +151,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440)
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440) # 24 hrs
 }
 
 

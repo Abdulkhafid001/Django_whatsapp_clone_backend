@@ -261,7 +261,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwODAzODkyLCJpYXQiOjE3NzA3MTc0OTIsImp0aSI6IjQ4NTE1ODhlOGRjNTQ4ZmZiNTM0Y2UzNWU0NWY2NGM4IiwidXNlcl9pZCI6IjcifQ._nwI_qEj3tS_E5q6HxNmcSHg2--nKSjPQ3wsXndbxfI',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwOTI4MDM4LCJpYXQiOjE3NzA4NDE2MzgsImp0aSI6IjlhNzk1NmVmNTU1MjRkOGJiMjlmOGI1OGRmZTk3ODg5IiwidXNlcl9pZCI6IjEifQ.30AVx3wnvQXLb7S6Xu3WMnUtxNLI1j7gbudTn9b0S0U',
                 },
                 body: JSON.stringify(data),
             })
@@ -270,6 +270,7 @@
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
+                    window.location.href = 'http://127.0.0.1:5500/frontend/home.html';
                 })
                 .then(data => {
                     alert('Success:', data);

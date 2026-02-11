@@ -1,17 +1,17 @@
 from rest_framework import serializers
 from django.db.models import fields
 from rest_framework.decorators import api_view
-from .models import WcUser, AccessToken
+from .models import WcUser, RefreshToken
 
 
-class AccessTokenSerializer(serializers.ModelSerializer):
+class RefreshTokenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AccessToken
+        model = RefreshToken
         fields = ('token')
 
 
 class WcUserSerializer(serializers.ModelSerializer):
-    token = AccessTokenSerializer(read_only=True)
+    token = RefreshTokenSerializer(read_only=True)
 
     class Meta:
         model = WcUser

@@ -1,13 +1,14 @@
 from rest_framework import status
 from rest_framework import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import WcUser, AccessToken as WcAccessToken
+from .models import WcUser, RefreshToken as WcRefreshToken
 from .serializers import WcUserSerializer
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 
 @api_view(['GET'])
@@ -18,6 +19,7 @@ def ApiOverview(request):
         'Create': '/create',
         'Update': 'update/pk',
         'Delete': '/item/pk/delete',
+        'Login':  '/login',
         'ObtainJWTToken': '/obtaintoken',
         'RefreshJWTToken': '/refreshtoken',
     }
@@ -42,17 +44,25 @@ def create_user_access_token(username):
     try:
         user = user_model.objects.get(username=username)
         print("block executed")
-        # generate accesstoken
-        user_token = AccessToken.for_user(user)
-        # create accesstoken record in DB
-        WcAccessToken.objects.create(user=user, token=user_token)
+        # generate refresh token
+        user_refresh_token = RefreshToken.for_user(user)
+        # create refresh token record in DB
+        WcRefreshToken.objects.create(user=user, token=user_refresh_token)
     except WcUser.DoesNotExist:
         return 'cannot create user as user does not exist'
 
 
 @api_view(['POST'])
 def login(request):
-    pass
+    username = request.data["username"]
+    password = request.data['password']
+    user = authenticate(request, username=username, password=password)
+    print('found: ', user)
+    if user is not None:
+        print('block executed')
+        login(request, user)
+        return JsonResponse({'message: ': 'Details correct... User is logged in'}, status=status.HTTP_200_OK)
+    return JsonResponse({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
