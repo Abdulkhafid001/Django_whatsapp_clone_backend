@@ -8,7 +8,7 @@ from .models import WcUser, RefreshToken as WcRefreshToken
 from .serializers import WcUserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 
 @api_view(['GET'])
@@ -34,7 +34,7 @@ def create_user(request):
         serializer.save()
         # create access token for user
         create_user_access_token(request.data['username'])
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'data:': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -53,7 +53,7 @@ def create_user_access_token(username):
 
 
 @api_view(['POST'])
-def login(request):
+def login_user(request):
     username = request.data["username"]
     password = request.data['password']
     user = authenticate(request, username=username, password=password)
@@ -61,8 +61,10 @@ def login(request):
     if user is not None:
         print('block executed')
         login(request, user)
-        return JsonResponse({'message: ': 'Details correct... User is logged in'}, status=status.HTTP_200_OK)
-    return JsonResponse({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        # get refresh token and use to send access token to frontend and continue from there.
+        success = {'successful': True}
+        return Response(success, status=status.HTTP_200_OK)
+    return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

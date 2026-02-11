@@ -254,6 +254,7 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <button type="button" id="togglePassword">👁</button>
             </div>
 
             <div class="forgot-password">
@@ -303,6 +304,15 @@
             login('http://127.0.0.1:8000/customauth/login/', formObject)
         });
 
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+
+        toggleButton.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁' : '🙈';
+        });
+
         function login(url, data) {
             fetch(url, {
                 method: 'POST',
@@ -320,7 +330,7 @@
                 // }
                 return response.json()
             }).then(data => {
-                console.log('data: ', data)
+                console.log('data: ', data.success)
             }).catch(error => {
                 console.log('errors: ', error)
             })
