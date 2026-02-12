@@ -325,9 +325,9 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                // if (response.status == 200) {
-                // redirectToHomepage('http://127.0.0.1:5500/frontend/home.html')
-                // }
+                if (response.status == 200) {
+                    redirectToHomepage('http://127.0.0.1:5500/frontend/home.html')
+                }
                 return response.json()
             }).then(data => {
                 console.log('data: ', data.success)

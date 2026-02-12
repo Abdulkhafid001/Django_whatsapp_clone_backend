@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import WcUser, RefreshToken as WcRefreshToken
+from .models import WcUser, WcRefreshToken
 from .serializers import WcUserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -66,6 +66,14 @@ def login_user(request):
         return Response(success, status=status.HTTP_200_OK)
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+def get_user_refresh_token(username):
+    "this view checks if user access token is expired and get new tokens for user"
+    user_model = get_user_model()
+    # try:
+    user = user_model.objects.get(username=username)
+    user_refresh_token = WcRefreshToken
+    pass
 
 @api_view(['GET'])
 def get_all_users(request):

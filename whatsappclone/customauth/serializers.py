@@ -1,12 +1,12 @@
 from rest_framework import serializers
 from django.db.models import fields
 from rest_framework.decorators import api_view
-from .models import WcUser, RefreshToken
+from .models import WcUser, WcRefreshToken
 
 
 class RefreshTokenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RefreshToken
+        model = WcRefreshToken
         fields = ('token')
 
 
