@@ -7,6 +7,7 @@ urlpatterns = [
     path('users/', get_all_users, name='getallusers'),
     path('createuser/', create_user, name='createuser'),
     path('login/', login_user, name='loginuser'),
+    path("logout/", logout_user, name="logoutuser"),
     path('user/<int:id>/', get_user_by_id, name='getuserbyid'),
     path('user/<str:username>/', get_user_by_username, name='getuserbyusername'),
     path('user/<int:id>/delete/', delete_user, name='deleteuser')

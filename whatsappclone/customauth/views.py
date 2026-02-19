@@ -8,7 +8,8 @@ from .models import WcUser, WcRefreshToken
 from .serializers import WcUserSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import authenticate, login
+from rest_framework_simplejwt.views import TokenRefreshView
+from django.contrib.auth import authenticate, login, logout
 
 
 @api_view(['GET'])
@@ -20,6 +21,7 @@ def ApiOverview(request):
         'Update': 'update/pk',
         'Delete': '/item/pk/delete',
         'Login':  '/login',
+        'Logout':  '/logout',
         'ObtainJWTToken': '/obtaintoken',
         'RefreshJWTToken': '/refreshtoken',
     }
@@ -33,21 +35,24 @@ def create_user(request):
     if serializer.is_valid():
         serializer.save()
         # create access token for user
-        create_user_access_token(request.data['username'])
-        return Response({'data:': serializer.data}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        username = request.data['username']
+        # create_user_refresh_token(username)
+        return Response({'data': serializer.data, 'token': str(create_user_refresh_token(username))}, status=status.HTTP_201_CREATED)
+    return Response({"errors": serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-def create_user_access_token(username):
-    "this function automatically creates an access token user once created"
+def create_user_refresh_token(username):
+    "this function automatically creates a refresh token user once created and then returns the tokens"
     user_model = get_user_model()
     try:
         user = user_model.objects.get(username=username)
-        print("block executed")
         # generate refresh token
         user_refresh_token = RefreshToken.for_user(user)
-        # create refresh token record in DB
+        # save refresh token record to DB
         WcRefreshToken.objects.create(user=user, token=user_refresh_token)
+        # user_tokens = {'refreshtoken': user_refresh_token,
+        #                'accesstoken': user_refresh_token.access_token}
+        return user_refresh_token.access_token
     except WcUser.DoesNotExist:
         return 'cannot create user as user does not exist'
 
@@ -56,24 +61,50 @@ def create_user_access_token(username):
 def login_user(request):
     username = request.data["username"]
     password = request.data['password']
+    login_success = False
     user = authenticate(request, username=username, password=password)
     print('found: ', user)
     if user is not None:
         print('block executed')
+        # check if refresh token is still valid, if valid send access token to frontend, else, send info to redirect to login
         login(request, user)
         # get refresh token and use to send access token to frontend and continue from there.
-        success = {'successful': True}
-        return Response(success, status=status.HTTP_200_OK)
+        login_success = True
+        # get user to save in local storage for logout impl.
+        user_model = get_user_model()
+        user_info = user_model.objects.get(username=username).username
+        print('username from usermodel:', user_info)
+        data = {'username': user_info, 'loginSuccessful': login_success,
+                'accesstoken': str(create_user_refresh_token(username))}
+        return Response(data=data, status=status.HTTP_200_OK)
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_user_refresh_token(username):
-    "this view checks if user access token is expired and get new tokens for user"
+@api_view(['POST'])
+def logout_user(request):
+    username = request.data['username']
+    logout_successful = False
     user_model = get_user_model()
-    # try:
     user = user_model.objects.get(username=username)
-    user_refresh_token = WcRefreshToken
+    if user.is_authenticated:
+        logout(request)
+        logout_successful = True
+    return Response({'data': username, 'logoutSuccessful': logout_successful}, status=status.HTTP_200_OK)
+
+
+def get_user_refresh_token(username):
+    user_model = get_user_model()
+    try:
+        user = user_model.objects.get(username=username)
+        refresh_token = WcRefreshToken.objects.get(user=user)
+        return (refresh_token.token)
+    except WcUser.DoesNotExist:
+        return "no user found"
+
+
+def send_user_access_token(request):
     pass
+
 
 @api_view(['GET'])
 def get_all_users(request):

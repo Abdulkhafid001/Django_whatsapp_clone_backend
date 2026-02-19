@@ -230,6 +230,7 @@
             color: #3b4a54;
         }
     </style>
+
 </head>
 
 <body>
@@ -295,51 +296,7 @@
             Don't have an account? <a href="#">Sign up</a>
         </div>
     </div>
-
-    <script>
-        document.querySelector('form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target)
-            const formObject = Object.fromEntries(formData.entries())
-            login('http://127.0.0.1:8000/customauth/login/', formObject)
-        });
-
-        const passwordInput = document.getElementById('password');
-        const toggleButton = document.getElementById('togglePassword');
-
-        toggleButton.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? '👁' : '🙈';
-        });
-
-        function login(url, data) {
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwOTI4MDM4LCJpYXQiOjE3NzA4NDE2MzgsImp0aSI6IjlhNzk1NmVmNTU1MjRkOGJiMjlmOGI1OGRmZTk3ODg5IiwidXNlcl9pZCI6IjEifQ.30AVx3wnvQXLb7S6Xu3WMnUtxNLI1j7gbudTn9b0S0U',
-                },
-                body: JSON.stringify(data),
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                if (response.status == 200) {
-                    redirectToHomepage('http://127.0.0.1:5500/frontend/home.html')
-                }
-                return response.json()
-            }).then(data => {
-                console.log('data: ', data.success)
-            }).catch(error => {
-                console.log('errors: ', error)
-            })
-        }
-
-        function redirectToHomepage(url) {
-            window.location.href = url
-        }
-    </script>
+    <script src="./loginscript.js"></script>
 </body>
 
 </html>

@@ -214,6 +214,7 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password">
+                <button type="button" id="togglePassword">👁</button>
             </div>
 
             <button type="submit" id="submitBtn" class="signup-btn">Sign Up</button>
@@ -246,6 +247,14 @@
     </div>
 
     <script>
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+
+        toggleButton.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁' : '🙈';
+        });
         document.querySelector('form').addEventListener('submit', (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -255,31 +264,32 @@
             signUp('http://127.0.0.1:8000/customauth/createuser/', formObject)
         });
 
-
-        function signUp(route, data) {
-            fetch(route, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcwOTI4MDM4LCJpYXQiOjE3NzA4NDE2MzgsImp0aSI6IjlhNzk1NmVmNTU1MjRkOGJiMjlmOGI1OGRmZTk3ODg5IiwidXNlcl9pZCI6IjEifQ.30AVx3wnvQXLb7S6Xu3WMnUtxNLI1j7gbudTn9b0S0U',
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                    window.location.href = 'http://127.0.0.1:5500/frontend/home.html';
-                })
-                .then(data => {
-                    alert('Success:', data);
-                    window.location.href = 'http://127.0.0.1:5500/frontend/home.html';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+        async function signUp(route, data) {
+            try {
+                const response = await fetch(route, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxNjIyNTk5LCJpYXQiOjE3NzE1MzYxOTksImp0aSI6IjkwMWVlZWU0NjU2NTQ4NmRhMTlhNjFkNTlkYWZlZGI5IiwidXNlcl9pZCI6IjEifQ.8cPOoqnyO966iSZKBxSBcKTAJ-3g5ij0hPe1sWhCWLE",
+                    },
+                    body: JSON.stringify(data),
                 });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const responseData = await response.json();
+                console.log(responseData.data.username);
+                const accessToken = responseData.token;
+                localStorage.setItem('userAccesstokenSignup', accessToken);
+                const responseCode = response.status
+                if (responseCode == 201) {
+                    //redirect to homepage
+                    alert('redirect to homepage')
+                    window.location.href = 'C:/Users/USER/Documents/Code Folders/Django_whatsapp_clone_backend/frontend/home.html'
+                }
+            } catch (error) {
+                console.error("Errors:", error);
+            }
         }
+
 
         function signUpWithGoogle() {
 
