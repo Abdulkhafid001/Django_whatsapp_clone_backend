@@ -189,6 +189,15 @@
             width: 20px;
             height: 20px;
         }
+
+        .response-message-container {
+            width: 100%;
+            background-color: red;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            color: white;
+        }
     </style>
 </head>
 
@@ -203,6 +212,9 @@
             </div>
             <h1>Sign up to WhatsAppClone</h1>
             <p class="subtitle">Create your account to get started</p>
+        </div>
+        <div class="response-message-container">
+            <p id="response-message"></p>
         </div>
 
         <form id="form" method="post">
@@ -259,8 +271,6 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const formObject = Object.fromEntries(formData.entries());
-            console.log(formObject.username);
-            console.log(formObject.password);
             signUp('http://127.0.0.1:8000/customauth/createuser/', formObject)
         });
 
@@ -270,15 +280,19 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxNjIyNTk5LCJpYXQiOjE3NzE1MzYxOTksImp0aSI6IjkwMWVlZWU0NjU2NTQ4NmRhMTlhNjFkNTlkYWZlZGI5IiwidXNlcl9pZCI6IjEifQ.8cPOoqnyO966iSZKBxSBcKTAJ-3g5ij0hPe1sWhCWLE",
+                        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxOTI2NDI3LCJpYXQiOjE3NzE4NDAwMjcsImp0aSI6IjdmNzQwMGUwOTI5ZTQ3ZTk4ZjcyNmY2MDc3N2E5ZDBiIiwidXNlcl9pZCI6IjEifQ.u47lrm9Tev0TawxMCx-vU6m5eqVwAalQ-wlCXOc537A",
                     },
                     body: JSON.stringify(data),
                 });
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                if (!response.ok) {
+                    const responseMessage = document.getElementById('response-message');
+                    responseMessage.innerHTML = 'There was an error during Signup, either the access key is expired or WcUser with username already exists, or look for this request in the network tab and get the specific message sent from the server. Or please try again!';
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const responseData = await response.json();
-                console.log(responseData.data.username);
                 const accessToken = responseData.token;
                 localStorage.setItem('userAccesstokenSignup', accessToken);
+
                 const responseCode = response.status
                 if (responseCode == 201) {
                     //redirect to homepage

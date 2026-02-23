@@ -4,7 +4,7 @@ async function signUp(route, data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxNDM5MDEwLCJpYXQiOjE3NzEzNTI2MTAsImp0aSI6ImJjYTJlZTBjNTQ4NjQ1MGJhYTg3OWZlNDAzNzQ1ODM2IiwidXNlcl9pZCI6IjEifQ.6LTwXDAOFXBwdxBOJgh8r34Ajt45K1iCy0d3sALT4Ug",
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcxOTI2NDI3LCJpYXQiOjE3NzE4NDAwMjcsImp0aSI6IjdmNzQwMGUwOTI5ZTQ3ZTk4ZjcyNmY2MDc3N2E5ZDBiIiwidXNlcl9pZCI6IjEifQ.u47lrm9Tev0TawxMCx-vU6m5eqVwAalQ-wlCXOc537A",
       },
       body: JSON.stringify(data),
     });
@@ -12,6 +12,7 @@ async function signUp(route, data) {
     const responseData = await response.json();
     console.log(responseData.data.username);
     console.log(responseData.tokens);
+    const responseMessage = document.getElementById('response-message').textContent = 'hello world';
   } catch (error) {
     console.error("Errors:", error);
   }

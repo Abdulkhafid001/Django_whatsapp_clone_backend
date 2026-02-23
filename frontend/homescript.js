@@ -8,7 +8,11 @@ async function logout(url, data) {
     body: JSON.stringify(data),
   });
   const responseData = await request.json();
-  console.log(responseData);
+  // console.log(responseData);
+  if (responseData.logoutSuccessful === true){
+    localStorage.removeItem('username');
+    window.location.href = "C:/Users/USER/Documents/Code Folders/Django_whatsapp_clone_backend/frontend/login.html"
+  }
 }
 const getUsernameLocalStorage = localStorage.getItem("username");
 
