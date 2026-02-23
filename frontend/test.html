@@ -5,12 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test</title>
-    
+
 </head>
 
 <body>
-    <button id="execute">click to run JS</button>
-    <script src="./scripts.js"></script>
+    <h1>WebSocket Demo</h1>
+
+    <input type="text" id="msg" placeholder="Enter message">
+    <button onclick="sendMessage()">Send</button>
+
+    <ul id="messages"></ul>
+
+    <script>
+        const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/");
+
+        socket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const li = document.createElement("li");
+            li.innerText = data.message;
+            document.getElementById("messages").appendChild(li);
+        };
+
+        function sendMessage() {
+            const message = document.getElementById("msg").value;
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+        }
+    </script>
 </body>
 
 </html>

@@ -22,6 +22,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'chat',
     'customauth',
     'rest_framework',
@@ -63,8 +65,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'whatsappclone.wsgi.application'
-
+# WSGI_APPLICATION = 'whatsappclone.wsgi.application'
+# Websocket Info
+ASGI_APPLICATION = 'whatsappclone.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -151,7 +159,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440) # 24 hrs
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440)  # 24 hrs
 }
 
 
