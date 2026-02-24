@@ -12,8 +12,7 @@ class SimpleConsumer(WebsocketConsumer):
         # Send welcome message
         self.send(text_data=json.dumps({
             'type': 'connection_established',
-            # 'message': 'You are now connected Yslcodes',
-            'message': wc_users
+            'message': 'You are now connected Yslcodes',
         }))
 
     def disconnect(self, close_code):

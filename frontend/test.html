@@ -26,6 +26,10 @@
             document.getElementById("messages").appendChild(li);
         };
 
+        socket.onerror = function (error) {
+            console.error(error)
+        }
+
         function sendMessage() {
             const message = document.getElementById("msg").value;
             socket.send(JSON.stringify({
