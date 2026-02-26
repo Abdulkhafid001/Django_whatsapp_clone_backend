@@ -1,8 +1,9 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, JsonWebsocketConsumer
+from customauth.services import get_all_users
 
 
-class SimpleConsumer(WebsocketConsumer):
+class SimpleConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         """Called when WebSocket connection is opened"""
@@ -12,7 +13,8 @@ class SimpleConsumer(WebsocketConsumer):
         # Send welcome message
         self.send(text_data=json.dumps({
             'type': 'connection_established',
-            'message': 'You are now connected Yslcodes',
+            # 'message': 'You are now connected Yslcodes',
+            'message': get_all_users()
         }))
 
     def disconnect(self, close_code):
@@ -30,3 +32,7 @@ class SimpleConsumer(WebsocketConsumer):
             'type': 'chat_message',
             'message': message
         }))
+
+
+class NotificationConsumer(AsyncWebsocketConsumer):
+    pass

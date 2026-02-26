@@ -21,9 +21,12 @@
 
         socket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            const li = document.createElement("li");
-            li.innerText = data.message;
-            document.getElementById("messages").appendChild(li);
+            const length = Object.entries(data).length;
+            for (i = 0; i < length; i++) {
+                const li = document.createElement("li");
+                li.innerText = data.message[i].username;
+                document.getElementById("messages").appendChild(li);
+            }
         };
 
         socket.onerror = function (error) {
