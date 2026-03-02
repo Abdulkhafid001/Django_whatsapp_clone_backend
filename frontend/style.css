@@ -1,0 +1,28 @@
+p {
+    color: rebeccapurple;
+}
+
+.notifications-container {}
+
+.notification-title-and-count {
+    display: flex;
+    align-items: center;
+}
+
+.notifications {
+    background-color: gray;
+    width: 500px;
+    padding: 20px;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 60px;
+    background-color: red;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+    margin-left: 20px;
+}

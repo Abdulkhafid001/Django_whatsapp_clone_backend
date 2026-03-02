@@ -11,7 +11,8 @@ class Room(models.Model):
 
 
 class Message(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -21,3 +22,21 @@ class Message(models.Model):
 
     def __str__(self):
         return f'{self.user.username}: {self.content[:50]}'
+
+
+class Post(models.Model):
+    author = models.CharField(null=True)
+    content = models.TextField()
+    pub_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.author} published this blog post'
+
+
+class PostNotification(models.Model):
+    post = models.ForeignKey('Post', null=True, on_delete=models.CASCADE)
+    authorName = models.CharField(null=True)
+
+
+    def __str__(self):
+        return f'{self.authorName} published this blog post'
