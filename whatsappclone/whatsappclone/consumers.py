@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer, JsonWebsocketConsumer
 from customauth.services import get_all_users
+from chat.services import get_all_post_notifications
 
 
 class SimpleConsumer(JsonWebsocketConsumer):
@@ -39,7 +40,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """Called when a Websocket is opened."""
 
         # creating a room
-        self.room_name = self.scope['url_route']['kwargs']['room_name']# type: ignore
+        # type: ignore
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
 
         # Join a room group
@@ -81,20 +83,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
         pass
 
 
-class NotificationConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
+class NotificationConsumer(WebsocketConsumer):
+    def connect(self):
         """Called when a websocket connection is opened"""
-        await self.accept()
+        self.accept()
 
-        await self.send(text_data=json.dumps({'message': 'Notification Websocket connected successfully'}))
+        self.send(text_data=json.dumps(
+            {'message': 'Notification Websocket connected successfully', 'notifications': get_all_post_notifications()}))
 
-    async def receive(self, data):
+    def receive(self, text_data):
         """Called when a message is received from the client"""
-        data = await json.loads(data)
+        data = json.loads(text_data)
         message = data['message']
         print(message)
 
-        await self.send(text_data=json.dumps({'message': 'notification message received'}))
+        self.send(text_data=json.dumps(
+            {'message': 'notification message received'}))
 
-    async def disconnect(self):
+    def disconnect(self, close_code):
         pass

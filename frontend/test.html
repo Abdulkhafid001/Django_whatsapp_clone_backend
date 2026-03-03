@@ -20,24 +20,32 @@
         <div class="notification-title-and-count">
             <h3>Notifications will go here</h3>
             <div class="circle">
-                <p class="notification-count">12</p>
+                <p class="notification-count" id="notif-count">12</p>
             </div>
         </div>
-        <div class="notifications">
-            <a href="abubakar just posted a new blog post">Abubakar just posted a new blog post </a>
+        <div class="notifications" id="notifications">
         </div>
     </div>
     <script>
-        const socket = new WebSocket("ws://127.0.0.1:8000/ws/testmessage/");
+        //const socket = new WebSocket("ws://127.0.0.1:8000/ws/testmessage/"); // socket for testmessage
+        const socket = new WebSocket("ws://127.0.0.1:8000/ws/notifications/")
 
         socket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            const length = Object.entries(data).length;
-            for (i = 0; i < length; i++) {
-                const li = document.createElement("li");
-                li.innerText = data.message[i].username;
-                document.getElementById("messages").appendChild(li);
+            console.log(data.message)
+            const dataLength = Object.entries(data).length;
+            const notificationLenght = Object.entries(data.notifications).length
+            console.log(notificationLenght)
+            document.getElementById('notif-count').innerText = notificationLenght;
+            for (i = 0; i < notificationLenght; i++) {
+                console.log(data.notifications[i].authorName)
+                console.log(data.notifications[i].post)
+                const link = document.createElement('a')
+                link.href = `http://127.0.0.1:8000/chat/postnotification/${data.notifications[i].post}`
+                link.innerText = `${data.notifications[i].authorName} just published a post`
+                document.getElementById('notifications').appendChild(link);
             }
+
         };
 
         socket.onerror = function (error) {

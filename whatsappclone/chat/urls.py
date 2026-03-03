@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.urls import path
-from chat.views import *
+from . import views
 urlpatterns = [
-    path('', welcome_view),
+    path('', views.welcome_view),
+    path('postnotification/<int:pk>', views.PostNotificationDetailView.as_view())
 ]
