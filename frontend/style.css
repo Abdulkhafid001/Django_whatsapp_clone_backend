@@ -2,7 +2,7 @@ p {
     color: rebeccapurple;
 }
 
-.notifications-container {}
+/* .notifications-container {} */
 
 .notification-title-and-count {
     display: flex;

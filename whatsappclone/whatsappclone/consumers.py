@@ -40,8 +40,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """Called when a Websocket is opened."""
 
         # creating a room
-        # type: ignore
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_name = self.scope['url_route']['kwargs']['room_name']  # type: ignore
         self.room_group_name = f'chat_{self.room_name}'
 
         # Join a room group

@@ -28,9 +28,14 @@ class Post(models.Model):
     author = models.CharField(null=True)
     content = models.TextField()
     pub_time = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=5, blank=True, null=True, decimal_places=2)
 
     def __str__(self):
         return f'{self.author} published this blog post'
+    
+    class Meta:
+        verbose_name = 'post'
+        verbose_name_plural = 'posts'
 
 
 class PostNotification(models.Model):
