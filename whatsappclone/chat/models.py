@@ -38,9 +38,14 @@ class Post(models.Model):
         verbose_name_plural = 'posts'
 
 
+class PostNotificationStatus(models.TextChoices):
+        seen = 'Seen',('Seen')
+        not_seen = 'Not Seen',('Not Seen')
+
 class PostNotification(models.Model):
     post = models.ForeignKey('Post', null=True, on_delete=models.CASCADE)
     authorName = models.CharField(null=True)
+    seen = models.CharField(blank=True, null=True, default=PostNotificationStatus.not_seen, choices=PostNotificationStatus.choices)
 
 
     def __str__(self):

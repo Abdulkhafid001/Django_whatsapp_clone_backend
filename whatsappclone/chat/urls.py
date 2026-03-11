@@ -3,5 +3,6 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path('', views.welcome_view),
+    path('posts/', views.posts),
     path('postnotification/<int:pk>', views.PostNotificationDetailView.as_view())
 ]

@@ -4,7 +4,7 @@ async function login(url, data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzcyMTg1ODA5LCJpYXQiOjE3NzIwOTk0MDksImp0aSI6IjUzMzhjZGU2NGVkYzQxYTdhZjg3NzZlZjNkNjJmNmI1IiwidXNlcl9pZCI6IjEifQ.xKXgo3MXxuJPncUvQ0ySb-sZnn24ezQFEoOGVCnBl24",
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczMjY4NjY2LCJpYXQiOjE3NzMxODIyNjYsImp0aSI6ImYwNDVhZjkxOTdjMjRhZTg4ZWJjZGJhYzc5NjE2MzQ3IiwidXNlcl9pZCI6IjEifQ.9y7xZeO8xfRvevLcqFky_KyTnZ7P6FDJ7muxexHF7ZI",
       },
       body: JSON.stringify(data),
     });
